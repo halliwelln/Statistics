@@ -5,7 +5,7 @@ output:
 mainfont: Liberation Mono
 mathfont: Liberation Mono
 fontsize: 12pt
-linestretch: 1.5
+linestretch: 1.4
 ---
 #MLE regression
 $y(x) = E[t|x]$\
@@ -120,7 +120,11 @@ posterior mean: $w_{bayes} := \int wp(w|t,X) dw$\
 posterior mode MAP: arg max log $p(w|t,X) =$ arg max log $p(t|X,w)$ + log $p(w)$ log lik + penalty (how far from prior)\
 $\nabla$ log $p(w_{MAP}|t, X) = 0$\
 $Q := cov(w,w|t,X)^{-1}$ curvature of posterior $-\nabla \nabla$ log $p(w_{MAP}|t, X)|_{w=w_{MAP}}$\
-Gaussian posterior: $w_{bayes} = w_{MAP}$, $Q = \nabla \nabla$ log $p(w_{MAP}|t, X)|_{w=w_{MAP}}$
+Gaussian posterior: $w_{bayes} = w_{MAP}$, $Q = \nabla \nabla$ log $p(w_{MAP}|t, X)|_{w=w_{MAP}}$\
+\
+With $\lambda = 0$, $(\lambda I + \Phi^T\Phi)w_{bayes} = \Phi^Tt$ is like MLE.\
+\
+Bayes' strength in averaging, so maximization. But can yield very different w than MAP because of concentration. $w_{bayes}$ concentrate on circle around $w_{MAP}$ ball.
 
 #Prior Modelling
 $w \sim \mathcal{N} (0, (q\delta)^{-1}I)$ $q$ is how much I want the prior to matter. Not known, put NG on it\
