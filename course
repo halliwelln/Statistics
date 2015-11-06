@@ -1,0 +1,141 @@
+---
+output:
+  pdf_document:
+    latex_engine: xelatex
+mainfont: Liberation Mono
+mathfont: Liberation Mono
+fontsize: 12pt
+linestretch: 1.5
+---
+#MLE regression
+$y(x) = E[t|x]$\
+Predicted $t$ is the expected value of observed $t$ given observed $x$\
+\
+$\phi(x)$ compilation of column transformations of $x$\
+$\phi_n$ row transformations of $x_n$\
+$\Phi$ compilation of row transformations\
+\
+$t|x \sim \mathcal{N} (y(x), q^{-1})$ \
+Observed $t$ is normally distributed with mean fitted $y(x)$ and variance $q^{-1}$\
+$t = y(x) + \epsilon$, $\epsilon \sim \mathcal{N} (0, q^{-1})$\
+The error term yields the model's variance $q^{-1}$\
+Two parameters: mean from w and q\
+\
+$t|x \sim \mathcal{N} (\Phi w, q^{-1})$\
+\
+$\Phi^T\Phi w = \Phi^T t$\
+Covariance (not /N) of independent variables times coefficients equals\ 
+covariance (not /N) of indepent variable with the dependent variable\
+\
+$w_{MLE} = (\phi^T\phi)^{-1}\phi^T t$\
+$\phi (\phi^T\phi)^{-1}\phi^T t = \widehat{t}$\
+$Ht = \widehat{t}$, orthogonal projection of $t$ in $\phi\ (\phi^T\phi)^{-1}\phi^T$ space\
+$tr(H) = rank(\Phi)$\
+\
+MLE leads to $q_{MLE} = (\frac{e^Te}{N})^{-1}$\
+Variance in terms of model's error\
+\
+$w_{MLE} \sim \mathcal{N} (w_0, (q_0\Phi^T\Phi)^{-1})$\
+if good model. Variance = precision dependent variables*original variance\
+\
+$t_{N+1}|x_{N+1 } \sim \mathcal{N} (\phi(x_{N+1})^Tw_{MLE}, q_{MLE}^{-1})$ old $w, q$\
+\
+$\widehat{t} = E[t|X, w_{MLE}, q_{MLE}] = y(X, w_{MLE})$\
+\
+$e = t - \widehat{t} = (I-H)t$, $t$ minus the projection of $t$. Geometrically, $e$ = perpendicular segment\
+$e|X \sim \mathcal{N} (0, q^{-1}(I-H))$, if good model. Variance is $t$ minus projection, divided by the model's precision\
+\
+Standardized $e_n = \sqrt{\frac{q}{1-H_{ii}}}e_n$\
+scale up $e_n$ if high leverage given by $H_{ii}$ hat matrix diagonal element\
+\
+$R^2$ model fit measure: $1 - \frac{V[t|x]}{V[t]}$\
+$V[t|x] \leq V[t]$, ratio $\in [0,1]$, because $t$ has to fit at least equally well the sample than the whole population\
+Also $= 1 - \frac{(t-\widehat{t})^2}{(t-\overline{t})^2}$. Error divided by spread around mean
+
+#SVD regression
+SVD expands original data in coordinate system where covariance matrix is diagonal\
+\
+$\Phi^T\Phi$ not invertible when more independent variables than observations. You cannot solve the system $\Phi \Phi^T = I$\
+We can have $M+1 > N$, even $M+1 < N$ can lead to singular $\Phi^T \Phi$\
+\
+$\Phi^T\Phi$ positive semidefinite so the eigenvalues $\geq$ 0\
+$rank(\Phi) = min(indep rows, indep cols) \leq min(N, M+1)$\
+\
+$\Phi^T\Phi = U_r \Lambda_r U_r^T$ excluding 0 eigenvalues\
+$\Phi = V_r \sqrt{\Lambda_r} U_r^T$ excluding 0 eigenvalues\
+$U_r$ = transpose of the right eigenvectors of $\Phi^T$
+\
+$\Phi w = V_r \sqrt{\Lambda_r} U_r^T w =: V_r\theta$\
+$(t-V_r\theta)^T(t-V_r\theta)$, $\theta_{MLE} = V_r^T t$\
+hence linear predictor $= V_rV_r^T t = Ht$\
+\
+Full rank $r = M+1$: $V_{M+1}\Lambda U^T w = V_{M+1}\theta$, $w = U\Lambda^{-1}\theta$, $U\Lambda^{-1}\theta_{MLE} = (\Phi^T\Phi)^{-1}\Phi^Tt=w_{MLE}$\
+Unidentification $r < M+1$, $r < N$: $V_r\Lambda_rU_r w = V_r\theta_{MLE}$ normal case\
+Overfitting $r = N \leq M+1$: $V_N = V$, $V_N\theta_{MLE} = V_NV_N^Tt = t$, $e = 0$, $q_{MLE} = \infty$ so 0 variance\
+\
+Remove eigenvalues not relevant for  SVD regression, not in $r$\
+$(\Phi^T\Phi)^{-1} \approx U_r\Lambda_r^{-1}U_r^T$, $U_r$ symmetric\
+$w_{MLE} = U_r\Lambda^{1/2}_rV_r^Tt =  U_r\Lambda^{1/2}\theta_{MLE}$ (because $w_{MLE} = (\phi^T\phi)^{-1}\phi^T t$)\
+\
+$rank(\Phi) = M+1$ but ill-conditioned, better use approximation MLE above\
+SVD works when $M+1 > N$, $\Phi^T\Phi w^* = \Phi^Tt$\
+The design matrix becomes $V_r$\
+$t \sim \mathcal{N} (V_r\theta, q^{-1}I)$\
+$\theta_{MLE} = V_r^Tt$
+
+#Bayesian linear regression
+recap: w gives mean of t, learn w thanks to data and prior beliefs about mean and variance\
+joint (X variables independent) $p(t, X, w, q) = p(t|X, w, q) p(X) p(w, q)$ likelihood * assumption * prior\
+learn parameters: posterior $p(w, q|t,X) = \frac{p(t,X,w,q)}{p(t,X)}$ probability of specific parameters over probabiltiy with any set of parameters$= \frac{joint}{p(t,X)} = \frac{p(t|X, w, q)p(w, q)}{p(t|X)}$ divide by the marginal likelihood/model evidence, the probability of observing the data given a specific model. The $p(t|X)$ doesn't matter\
+$p(t|X,w,q) = \prod_{n=1}^{N} p(t_n|x_n,w,q)$ probability of target training given X training and parameters\
+\
+prediction $p(t_{N+1}|t,X,x_{N+1})$ how $t_{N+1}$ is distributed $\propto \int p(t_{N+1} |, x_{N+1} , w, q)p(w, q|t, X)dw dq$ times posterior\
+![alt text](/home/thomas/Dropbox/DS/stats/acyclic.png)\
+double circle: deterministic function from other element\
+$p(x_n)$ irrelevant\
+$\mu$, D hyperparameters $p(w) = \mathcal{N} (w|\mu, D^{-1})$\
+known q variance of target\
+\
+derivation of -2 log posterior to get distribution of w:\
+$-2logp(w|t,X)$ posterior with only w unknown $= -2(loglikelihood + logprior - logevidence)$. Prior w follows Gauss. Evidence won't be present in derivation\
+Forming the quadratic term of a Normal such as w|t,X $\sim \mathcal{N} (Q^{-1}(q\Phi^Tt + D\mu), Q^{-1})$ where $Q = D + q\Phi^T\Phi$
+
+#Bayesian prediction
+$D = \lambda I$\
+from likelihood, $t_{N+1}|x_{N+1}, w, q = \phi(x_{N+1})^Tw + \epsilon$, $\epsilon \sim \mathcal{N} (0, q^{-1})$\
+according to posterior, $t_{N+1}|t, X, x_{N+1} \sim \mathcal{N} (\phi(x_{N+1})^Tw_{bayes}, \phi(x_{N+1})^TQ^{-1}\phi(x_{N+1})+q^{-1}))$ we add the prior variance to covariance from posterior's exponent\
+\
+contrary to MLE, prediction variance increases with $q^{-1}$\
+thin pink area when new close to old bc predictive variance $= \phi(x_{N+1})^T(\delta I + q \Phi^T\Phi)^{-1}\phi(x_{N+1})$ that can be reduced as $|\frac{x_{N+1}}{x_N}|$(?) so bigger difference, bigger variance\
+\
+linear model differs just about variance\
+a priori prediction distribution $y(x) \sim \mathcal{N} (0, \delta^{-1}\phi(x)^T\phi(x))$ mean from mean w = 0. Variance depends on belief on w's precision\
+$cov(y(x), y(x')) = \delta^{-1}\phi(x)^T\phi(x')$\
+\
+update to posterior Gaussian random function $y(x)|t,X \sim \mathcal{N} (\phi(x)^Tw_{bayes}, \phi(x)^TQ^{-1}\phi(x))$ contrary to distribution $t_{N+1}$ no assumption on new $x_{N+1}$ so no $+ q^{-1}$\
+$cov(y(x), y(x')|t,X) = \phi(x)^TQ^{-1}\phi(x')$\
+learn iteratively about shape function\
+\
+posterior mean: $w_{bayes} := \int wp(w|t,X) dw$\
+posterior mode MAP: arg max log $p(w|t,X) =$ arg max log $p(t|X,w)$ + log $p(w)$ log lik + penalty (how far from prior)\
+$\nabla$ log $p(w_{MAP}|t, X) = 0$\
+$Q := cov(w,w|t,X)^{-1}$ curvature of posterior $-\nabla \nabla$ log $p(w_{MAP}|t, X)|_{w=w_{MAP}}$\
+Gaussian posterior: $w_{bayes} = w_{MAP}$, $Q = \nabla \nabla$ log $p(w_{MAP}|t, X)|_{w=w_{MAP}}$
+
+#Prior Modelling
+$w \sim \mathcal{N} (0, (q\delta)^{-1}I)$ $q$ is how much I want the prior to matter. Not known, put NG on it\
+Posterior precision $Q = q\delta I + q\Phi^T\Phi = q(D + \Phi^T\Phi)$\
+$w \sim \mathcal{N} (0,(qD)^{-1})$\
+Posterior mean $w_{bayes} = q^{-1}(D+\Phi^T\Phi)^{-1}q\Phi^Tt$\
+\
+$K$ bayesian hat matrix
+
+#Model complexity
+$min -2 l'w_m$, $p_m(t)$ evidence for model m\
+expect flat function in terms of $\delta$, not of $m$. Choice hyperparameter should not matter a lot\
+Bartlett's paradox: simple model doesn't shift with $\delta$, complex does. And there's less evidence for complex: $2 log p(M=2, \delta) > 2 log p(M=3, \delta)$. How prior affects within model different than between models: prior informative for model choice, not model shape. Bayesians use info rather than maximum likelihood.
+
+# Seeting up, displaying and interpreting a regression model
+Simplify $t$ in binary to classify\
+\
+Different intercept for each category
