@@ -132,7 +132,120 @@ Posterior precision $Q = q\delta I + q\Phi^T\Phi = q(D + \Phi^T\Phi)$\
 $w \sim \mathcal{N} (0,(qD)^{-1})$\
 Posterior mean $w_{bayes} = q^{-1}(D+\Phi^T\Phi)^{-1}q\Phi^Tt$\
 \
-$K$ bayesian hat matrix
+$K$ bayesian hat matrix  
+\
+Slide 4)
+
+Asssumptions in prior modeling: Independence (!In some/many cases not correc!)
+
+$p(w_{0:M})=\prod_{i}p_i(w_i)$
+
+w doesn't dependet on $\Phi$
+
+Whiteboard:
+
+$p(\theta|x)=\frac{p(x|\theta)p(\theta)}{p(x)}$
+
+-> because $\theta$ is a scalar
+-> p($\theta$) is learned from the data
+-> Conditional independence: $p(t|x,\theta)=p(t|y)$
+
+Slide 5) Main principles for choosing priors in a Bayesian model:           B. Homogeneity
+
+- Also often made assumption: Parameters are apriori independent and identically distributed:
+
+$w \sim \mathcal{N}(0,1\delta^{-1}\boldsymbol{I})$
+
+Example, Problems of different measurements:
+
+$w_i$ and $w_j$ are regression coefficients of features $\Phi$ i and $\Phi$ j respectively, where $\Phi$ i is distance related feature measured in kM, and $\Phi$ j a different distance related feature measured in mm.
+
+Whiteboard:
+
+Homogenity: In case of the normal distribution, we assume same variance and variance for all variables.
+
+Slide 6) Interlude: rethink our Bayes regression
+
+$p(\boldsymbol{t},\boldsymbol{X},\boldsymbol{w},q)=p(\boldsymbol{t}|\boldsymbol{X},\boldsymbol{w},q) p(\boldsymbol{X})p(\boldsymbol{w},q)$
+
+Alt:
+
+$p(\boldsymbol{t},\boldsymbol{X},\boldsymbol{w},q)=p(\boldsymbol{t}|\boldsymbol{X},\boldsymbol{w},q) p(\boldsymbol{w},q|\boldsymbol{X})p(\boldsymbol{X})$
+
+
+
+Slide 7) Main principles for choosing priors in a           Bayesian model C. Practicality :
+
+- Choose a prior that leads to mathematical tractability and/or fast computations:
+1) Conjugacy: Prior and posterior in the same parametric family; interesting when a lot is known about the family; e.g. Gaussian; Dirichlet distribution, Dirichlet process (!)
+2) Local conjugacy: in conjunction with MCMC/EM
+3) Exponential families: in conjunction with variational Bayes
+
+Slide 8) Hierarchical  
+\
+$p(w_{i}|\theta)$ is hyperparameter, $p(\theta)$ is prior, can take product as they are independent    
+\
+
+Slide 9) Prior ignorance  
+\
+We choose the prior to make integration easier  
+\
+Flat prior proportional to constant. If using a flat prior, $w_{MAP}$ and $w_{MLE}$ are equal  
+\
+Flat prior means no precision, infinite variance, know nothing about prior    
+\
+Slide 10) Shrinkage and Sparsity  
+\
+Thanks to the penalty term, we minimize $\hat{t} -t + \lambda \alpha$, minimizing just $\hat{t}-t$ will overfit  
+\
+Slide 12)  
+\
+$p(q)$ is prior belief about $\boldsymbol{w}$  
+\
+Prime: data has been seen  
+\
+p(q) follows gamma distribution, $p(\boldsymbol{w}|q)$ follows normal distribution. Product gives normal gamma
+\
+Conjugate prior: NG * Likelihood (Normal), Posterior $p(t|\boldsymbol{X},\boldsymbol{w},q)$ want to maximize $a',b',\boldsymbol{w}_{Bayes}, D'$  
+\
+Particular case of one prediction, predictive follows student t distribution  
+\
+$p(t_{n+1},t_{n}) = p(t_{n+1}|t_{n})p(t_{n})$  
+\
+$p(t_{n+1}|t_{n}) = \frac{p(t_{n+1},t_{n})}{p(t_{n})}$    
+\
+F is a scalar
+\
+Slide 13)  
+\
+$p(\boldsymbol{w}|q)$ is prior for the coefficients  
+\
+$q$ is intergrated out from expressions  
+\
+These formulas only work when mean is zero, all else, use formulas from above slide  
+\
+$D'$ is summation of prior precision and the data, and $w_{Bayes}$ is posterior mean   
+\
+Last line: F is inversed because t distribution is in terms of variance not precision  
+\
+$\frac{a'}{b'} F$ is variance scaled by degrees of freedom  
+\
+Slide 14)  
+\
+Assuming $a', b' > 0$ and $D'$ is positive definite, any choice of hyperparameters leads to valid posterior inference.  
+\
+If mean is zero, we have Jeffrey's prior  
+\
+Slide 15)  
+\
+G is how much you want prior to influence posterior  
+\
+Small g means you have weak prior assumptions  
+\
+This method works provided the MLE is well defined, and when $Z^{T}Z$ is invertible  
+\
+Z is $\Phi$ without intercept term  
+
 
 #Model complexity
 $min -2 l'w_m$, $p_m(t)$ evidence for model m\
@@ -144,4 +257,3 @@ Simplify $t$ in binary to classify\
 \
 Different intercept for each category
 
-Nick edit
