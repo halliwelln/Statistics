@@ -130,6 +130,120 @@ Posterior mean $w_{bayes} = q^{-1}(D+\Phi^T\Phi)^{-1}q\Phi^Tt$\
 \
 $K$ bayesian hat matrix
 
+#Prior Modeling
+Slide 4)
+
+Asssumptions in prior modeling: Independence (!In some/many cases not correc!)
+
+$p(w_{0:M})=\prod_{i}p_i(w_i)$
+
+w doesn't dependet on $\Phi$
+
+Whiteboard:
+
+$p(\theta|x)=\frac{p(x|\theta)p(\theta)}{p(x)}$
+
+-> because $\theta$ is a scalar
+-> p($\theta$) is learned from the data
+-> Conditional independence: $p(t|x,\theta)=p(t|y)$
+
+Slide 5) Main principles for choosing priors in a Bayesian model:           B. Homogeneity
+
+- Also often made assumption: Parameters are apriori independent and identically distributed:
+
+$w \sim \mathcal{N}(0,1\delta^{-1}\boldsymbol{I})$
+
+Example, Problems of different measurements:
+
+$w_i$ and $w_j$ are regression coefficients of features $\Phi$ i and $\Phi$ j respectively, where $\Phi$ i is distance related feature measured in kM, and $\Phi$ j a different distance related feature measured in mm.
+
+Whiteboard:
+
+Homogenity: In case of the normal distribution, we assume same variance and variance for all variables.
+
+Slide 6) Interlude: rethink our Bayes regression
+
+$p(\boldsymbol{t},\boldsymbol{X},\boldsymbol{w},q)=p(\boldsymbol{t}|\boldsymbol{X},\boldsymbol{w},q) p(\boldsymbol{X})p(\boldsymbol{w},q)$
+
+Alt:
+
+$p(\boldsymbol{t},\boldsymbol{X},\boldsymbol{w},q)=p(\boldsymbol{t}|\boldsymbol{X},\boldsymbol{w},q) p(\boldsymbol{w},q|\boldsymbol{X})p(\boldsymbol{X})$
+
+
+
+Slide 7) Main principles for choosing priors in a           Bayesian model C. Practicality :
+
+- Choose a prior that leads to mathematical tractability and/or fast computations:
+1) Conjugacy: Prior and posterior in the same parametric family; interesting when a lot is known about the family; e.g. Gaussian; Dirichlet distribution, Dirichlet process (!)
+2) Local conjugacy: in conjunction with MCMC/EM
+3) Exponential families: in conjunction with variational Bayes
+
+Slide 8) Hierarchical  
+\
+$p(w_{i}|\theta)$ is hyperparameter, $p(\theta)$ is prior, can take product as they are independent    
+\
+
+Slide 9) Prior ignorance  
+\
+We choose the prior to make integration easier  
+\
+Flat prior proportional to constant. If using a flat prior, $w_{MAP}$ and $w_{MLE}$ are equal  
+\
+Flat prior means no precision, infinite variance, know nothing about prior    
+\
+Slide 10) Shrinkage and Sparsity  
+\
+Thanks to the penalty term, we minimize $\hat{t} -t + \lambda \alpha$, minimizing just $\hat{t}-t$ will overfit  
+\
+Slide 12)  
+\
+$p(q)$ is prior belief about $\boldsymbol{w}$  
+\
+Prime: data has been seen  
+\
+p(q) follows gamma distribution, $p(\boldsymbol{w}|q)$ follows normal distribution. Product gives normal gamma
+\
+Conjugate prior: NG * Likelihood (Normal), Posterior $p(t|\boldsymbol{X},\boldsymbol{w},q)$ want to maximize $a',b',\boldsymbol{w}_{Bayes}, D'$  
+\
+Particular case of one prediction, predictive follows student t distribution  
+\
+$p(t_{n+1},t_{n}) = p(t_{n+1}|t_{n})p(t_{n})$  
+\
+$p(t_{n+1}|t_{n}) = \frac{p(t_{n+1},t_{n})}{p(t_{n})}$    
+\
+F is a scalar
+\
+Slide 13)  
+\
+$p(\boldsymbol{w}|q)$ is prior for the coefficients  
+\
+$q$ is intergrated out from expressions  
+\
+These formulas only work when mean is zero, all else, use formulas from above slide  
+\
+$D'$ is summation of prior precision and the data, and $w_{Bayes}$ is posterior mean   
+\
+Last line: F is inversed because t distribution is in terms of variance not precision  
+\
+$\frac{a'}{b'} F$ is variance scaled by degrees of freedom  
+\
+Slide 14)  
+\
+Assuming $a', b' > 0$ and $D'$ is positive definite, any choice of hyperparameters leads to valid posterior inference.  
+\
+If mean is zero, we have Jeffrey's prior  
+\
+Slide 15)  
+\
+G is how much you want prior to influence posterior  
+\
+Small g means you have weak prior assumptions  
+\
+This method works provided the MLE is well defined, and when $Z^{T}Z$ is invertible  
+\
+Z is $\Phi$ without intercept term
+
+
 #Model complexity
 $min -2 l'w_m$, $p_m(t)$ evidence for model m\
 expect flat function in terms of $\delta$, not of $m$. Choice hyperparameter should not matter a lot\
@@ -139,3 +253,603 @@ Bartlett's paradox: simple model doesn't shift with $\delta$, complex does. And 
 Simplify $t$ in binary to classify\
 \
 Different intercept for each category
+
+Slide 2)
+
+Recall from our study of the likelihood-identiﬁability that within the ML//LS framework the eﬀective number of parameters is not necessarily the nominal $M + 1$, but rather
+
+$r := #{\lambda_i = 0 , $\lambda_i$ eigenvalue of $\Phi^T$ $\Phi$ \} = rank($\Phi$) = tr($V_r$ $V^T_r$)$
+the last being established as exercise, where $V_r$ $V_r$ r is the orthogonal
+projection matrix that is the generalisation of the “hat” matrix
+What about the eﬀective number of parameters in a Bayesian/penalised ML framework?
+
+Whitboard notes:
+Gaussian Kernel smooths $p(x)$ curve    
+\
+
+Slide 3) Effective number of parameters in Bayesian linear model
+
+Recall the matrix $K$ that shows up in the kernel representation of Bayesian prediction
+
+$K = q\Phi Q^{−1}\Phi^T$
+
+The vector of the means of the predicted distribution at the training input values $x_n$ is
+
+$Kt =: \hat{t}_{Bayes}$
+
+that we could call the “Bayesian ﬁtted values”
+
+Whitboard notes:
+
+
+
+
+Slide 4) A Bayesian “hat” matrix and the eﬀective dimension
+
+Given that $K$ maps the observed data to a lower-dimensional mani-fold, we could use as a working deﬁnition of the eﬀective dimension:
+
+$eff := tr(K)$
+
+Figure: Black: eff for the sine data with Gaussian kernels, $\delta= 1$; Red: $tr(V_r V_r^T)$
+
+Whiteboard notes:
+\
+$K=H$, no penalty, expanding number of features/kernels, we overfit  
+\
+Red graph is $K$ without penalty (MLE, flat prior), residuals at break in line is zero  
+\
+
+Slide 5)
+
+
+Several 2 equivalent representations of eff. Highlights:
+
+$eff = tr((D^{−1} − Q^{−1})D)$
+
+Let $\gamma_i$ be the eigenvalues of $D^{−1/2} \Phi^T \Phi D^{−1/2}$; then
+
+$eff = \sum_i \frac{\gamma_i}{q^{-1}+\gamma_i}$
+
+For example, when $\boldsymbol{D} = \delta \boldsymbol{I}$ $\gamma_i = \lambda_i/\delta$ and
+
+$eff = \sum_i \frac{\lambda_i}{\lambda+\lambda_i}$, $\lambda=\delta/q$
+
+It is fairly easy to show that eff $≤ r$ .
+
+Can also define this measure for the $sNG(a, b, \boldsymbol{0}, \boldsymbol{D}, g )$ prior for $(\boldsymbol{w}, q)$ and get exactly the same as above with $q = g$ ; should not come as surprise in view of this
+
+Whiteboard notes:  
+\
+Eff is how much you've learned  
+\
+Eigenvalues compare information to prior information.  
+\
+$eff = \sum_i \frac{\lambda_i}{\frac{\delta}{q}+\lambda_i}$ where $\frac{\delta}{q}$ is penalty term. Large $\delta$ means we are confident about model implies eff is small. Increase $q$ implies large eff.  
+\
+Difference $(D^{−1} − Q^{−1})$ is how much you learned. Large difference means you learned a lot.  
+\
+$\gamma$ is amount of information about particular coefficient. Compares eigenvalue to prior precision. Large gamma implies corresponding parameter has lots of information.  
+\
+$\lambda_{i}$ eigenvalue of $\Phi^{T}\Phi$  
+\
+
+Slide 6) Balancing fit and complexity
+
+We will investigate a first group of methods that attempts to score
+and choose among a set of competing models of varying complexity,
+where maybe none is the actual DGP 3
+Recall that for nested regression models and in regular settings
+($N >> M + 1$, identifiability, DGP is one of the competing models)
+we have F tests for this
+We will look at this problem within variable selection context in detail
+in our “Big Data challenge week: ultra-high dimensional variable
+selection”
+The following slides aim at conveying the key ideas: we will make
+various simplifying assumptions for keeping math level low; conclu-
+sions remain well beyond these settings
+
+
+Whiteboard notes:
+
+
+Slide 7) Divergence and model approximation
+
+Setting:
+
+- DGP for $\boldsymbol{t}$ with density $g(\boldsymbol{t})$; no input variables.
+
+- Fit a parametric model with density $p(\boldsymbol{t}|\boldsymbol{w})$; not necessary that $p(\boldsymbol{t}|\boldsymbol{w}_0 ) = g (\boldsymbol{t})$ for some $\boldsymbol{w}_0$ ; interest in large number of such models
+
+Divergence between truth and an approximation:
+
+$KL(g ||f ) := \int g(\boldsymbol{t}) log \frac{g(\boldsymbol{t})}{f(\boldsymbol{t})} d\boldsymbol{t}$
+
+$=\int g (\boldsymbol{t}) \log g (\boldsymbol{t}) d\boldsymbol{t} −\int log(f(\boldsymbol{t}))g (\boldsymbol{t})d\boldsymbol{t}$
+
+$=: H(g,g)+H(g,f)$
+ 
+
+Whiteboard notes:
+$g(t)$ is the truth, approximated by $p(t|w) = f(t)$  
+\
+every point in bubble is value of parameter (represents parametric family)  
+\
+there exists a $w_{0}$ that is closest to the truth $g$ (least falst parameter)  
+\
+KL divergence measures how well $f$ approxmiates $g$  
+\
+We want $-H(g,g) + H(g,f)$ to be zero or close to zero  
+\
+Minimize cross entropy or maximize log likelihood  
+\
+
+
+Slide 8) Estimating the cross entropy
+
+Estimate cross-entropy using N samples
+
+$H(\widehat{g,p(\times|\boldsymbol{w})})=\frac{1}{N}\sum_n \log p(\boldsymbol{t}_n|\boldsymbol{w})$
+
+Minimising cross-entropy $≡$ maximising log-likelihood
+Score of a parametric model
+
+$E[H(g , p(·|w_{MLE}))]$
+
+How can we approximate this quantity? What about simply
+
+$H(g,p(·| \boldsymbol{w}_{MLE}))= − \frac{1}{N} \sum_n log p(\boldsymbol{t}_n| \boldsymbol{w}_{MLE})$
+
+
+
+Whiteboard notes:
+Maximum likelihood is guess of $w_{0}$  
+\
+Entropy is measure of how much information you have on distribution  
+\
+Cross entropy is a measure of how $f(t)$ and $g(t)$ are similar  
+\
+$g(t)$ is exact distribution of data  
+\
+$E[H(g, p(.|\boldsymbol{w}_{MLE}))]$ is average over every sample, but we can't evaluate, since we don't have all samples of population, must estimate   
+\
+First draw N samples, compute $\boldsymbol{w}_{MLE}$, then plug $\boldsymbol{w}_{MLE}$ into $H(g,p(·| \boldsymbol{w}_{MLE}))= − \frac{1}{N} \sum_n log p(\boldsymbol{t}_n| \boldsymbol{w}_{MLE})$  
+\
+$H(g,g) \leq H(g,f)$  
+\
+$H(g,g)$ is a constant, since $g$ is fixed  
+\
+
+Slide 9) Estimating the cross entropy
+
+- DGP: $\boldsymbol{t} \sim \mathcal{N}(\boldsymbol{\mu},  \boldsymbol{I})$ t is N-dimensional
+- Class of competing parametric models: $p_M (\boldsymbol{t}|\boldsymbol{w}) = \mathcal{N} (\boldsymbol{t}|\boldsymbol{w}, \boldsymbol{I})$
+with $\boldsymbol{w} = w_{1:M}, w_i$ , $i ≤ M$ to be learned and
+$w_j = 0$, $j = M + 1 : N$
+- Better fit & higher complexity: increase M
+
+Then, some fairly standard Gaussian calculations show that:
+
+$E (− \frac{1}{N} \sum_n \log p(\boldsymbol{t}_n|\boldsymbol{w}_{MLE}))=E(H(g,p_m(·|\boldsymbol{w}_{MLE} )))− \frac{1}{N} M$  
+\
+
+Whiteboard notes:  
+$\frac{-M}{N}$ is biased from $\boldsymbol{w}_{MLE}$ proportional to number of effective parameters $M$  
+\
+Slide 10)  
+\
+$-2 log (p(\boldsymbol{t}|\boldsymbol{w}_{MLE})) + 2 \tau$  
+\
+where $-2 log (p(\boldsymbol{t}|\boldsymbol{w}_{MLE}))$ measures lack of fit and $2 \tau$ is the complexity  
+\
+$\tau$ is a measure of the effective number of parameters  
+\
+Akaike IC: $\tau$ is the nominal number  
+\
+An expression is available for $\tau$  
+\
+$\tau = tr(\boldsymbol{J}^{-1}\boldsymbol{R})$  
+\
+$\boldsymbol{J} = -E_{g}[\nabla\nabla log (p(t|w_{0}))]$  
+\
+$\boldsymbol{R} = var_{g}[\nabla log (p(t|w_{0}))]$  
+\
+Other IC (e.g. Takeuchi) use different estimates of $\tau$: the name of the game here is to estimate m  
+\
+Want to minimize lack of fit and complexity  
+\
+$2(\tau-log p(t|\boldsymbol{w}_{MLE}))$ (minimizes lack of fit)   
+\
+complexity (overfit) - lack of fit (underfit)  
+\
+"Fisher information is the moment of the second derivative of the log likelihood" -Felex  
+\
+J is expected value of curvature  
+\
+Score is average of cross entropy  
+\
+R: take derivative with respect to $t$ ???  
+\
+Slide 11) CV  
+\
+A second way to estimate the bias is to use a second, "test" data set to compute  
+\
+$E[H(g,p(.|\boldsymbol{w}_{MLE}))] \approx \frac{-1}{M} \sum_{n=N+1}^{N+M} log (p(\boldsymbol{t}_{n}|\boldsymbol{w}_{MLE}))$  
+\
+Compute $\boldsymbol{w}_{MLE}$ with first N samples, then estimate score of model with next $M$ samples, eliminates bias. No longer have bias $\frac{-M}{N}$  
+\
+Have bias because of correlation between $t_{n}$ and $\boldsymbol{w}_{MLE}$  
+\
+Slide 12)  
+\
+If in the usual "reverse" Bayesian way we compute expectations with respect to parameters for fixed data:  
+\
+$\tau_{B} = tr(\boldsymbol{J}^{-1}_{B})$  
+\
+$\boldsymbol{J}_{B} = -E[\nabla\nabla log (p(\boldsymbol{t}|\boldsymbol{w})| \boldsymbol{t})]$    
+\
+$\boldsymbol{R}_{B} = var[\nabla log(p(\boldsymbol{t}|\boldsymbol{w})| \boldsymbol{t})]$  
+\
+Then, guess what! If $p(\boldsymbol{t} | \boldsymbol{w}) = \mathcal{N}(\boldsymbol{t} | \Phi w, q\boldsymbol{I})$ and $p(\boldsymbol{w}) = \mathcal{N}(\boldsymbol{w} | 0, \boldsymbol{D}^{-1})$  
+\
+(or in the Normal-Gamma model)  
+\
+$\tau_{B} = eff = tr(\boldsymbol{K})$  
+\
+Condition on t, average over $\boldsymbol{w}$. $\boldsymbol{w}$ is random, not t  
+\
+Average with respect to what you don't know, condition on what you know  
+\
+Slide 13)  
+\
+Another calculation obtains yet another equivalent expression for linear models:  
+\
+$eff = E[-2 log(p(\boldsymbol{t} | w) | \boldsymbol{t})] + 2 log (p(\boldsymbol{t} | w_{Bayes})) = p_{D}$  
+\
+which leads to the DIC  
+\
+$-2 log p(\boldsymbol{t}|\boldsymbol{w}_{Bayes}) + 2 p_{D}$  
+\
+where $-2 log p(\boldsymbol{t}|\boldsymbol{w}_{Bayes})$ is the lack of fit  
+\
+and $2 p_{D}$ is the Bayesian complexity  
+\
+For linear models $p_{D} = tr(\boldsymbol{K})$ again!  
+\
+Slide 14)  
+\
+$p_{m}(\boldsymbol{t}) = \frac{(p_{m}(\boldsymbol{w}_{m}))(p_{m}(\boldsymbol{t}|\boldsymbol{w}_{m}))}{p_{m}(\boldsymbol{w}_{m}|\boldsymbol{t})} = \int_{W_{m}} p_{m} (\boldsymbol{t} |\boldsymbol{w}_{m}) p_{m}(\boldsymbol{w}_{m}) d\boldsymbol{w}_{m}$  
+\
+where $p_{m}(\boldsymbol{w}_{m})$ is the prior model m  
+\
+$p_{m}(\boldsymbol{t}|\boldsymbol{w}_{m})$ is the likelihood model m  
+\
+and $p_{m}(\boldsymbol{w}_{m}|\boldsymbol{t})$ is the posterior model m    
+\
+Marginal likelihood $p_{m}(t)$ probability under that model that you observe exactly $t$ as that data  
+\
+$p(t) = \frac{p(w) * p(t|w)}{p(w|t)} = \frac{prior}{posterior} * likelihood$  
+\
+Marginalize over $w$ to get evidence n
+\
+Increasing $\delta$ decreses the prior on $w$, prior is more important than the data (high prior distribution)    
+\
+Maximize evidence is equivalent -$2 log$ marginal likelihood    
+\
+Evidence: probability to see this sample given a certain number of parameters  
+\
+Shrinkage: controlling variance of prior in order to be able to reduce the number of effective parameters faster  
+\
+Large $\delta$ small variance, incure penalty  
+\
+Decrease variance of prior and have large number of features: overfit  
+\
+Delta = 0 with small amount of data: overfit  
+\
+Delta near 0, better fit (many degrees of freedom, overfit)  
+\
+large $w^{t} * w$ you overfit  
+\
+$\lambda = \frac{variance of data}{variance w}$  
+\
+Have data with large and small variance, penalize model with large variance, function is jagged, not smooth. Smaller variance, ok to overfit. If variance of w is large, we are able to grab many new points.   
+\
+Slide 15)  
+\
+From "A toy but very appropriate example" with $w_{i} \sim \mathcal{N}(0,\delta^{-1})$ for $i \leq M$ and $w_{i} = 0$ for $i > M$  
+\
+$-2 log (p_{M}(\boldsymbol{t})) = \sum_{n}(\boldsymbol{t}_{n} - \hat{\boldsymbol{t}}_{M})^{T} (\boldsymbol{t}_{n} - \hat{\boldsymbol{t}}_{M}) + const$  
+\
+$M(log(N+\delta)-log\delta) + \delta(\frac{2}{N}+1)\boldsymbol{w}_{Bayes}^{T}\boldsymbol{w}_{Bayes}$  
+\
+X axis different realization of data (all possible $t's$), Y axis is evidence  
+\
+Change likelihood or prior, implies marginal distribution of data is changing  
+\
+Green curve: Small regularization, big model, good fit.  
+\
+Blue curve: Has likelihood with one or two features, or has shrinkage.  
+\
+Marginal likelihood takes simplest that is consistent with data. Increasing shrinkage enough, you end up choosing a less good model  
+\
+Shrinkage: shrink number of additional variables, controlled by lambda  
+\
+Slide 16)  
+\
+In "A toy but very appropriate example" repeating the calculation with $p(w_{i}) \propto 1$, we get:  
+\
+$-2 log (p_{M}(\boldsymbol{t})) = -2 log (p(\boldsymbol{t}|\boldsymbol{w}_{Bayes})) + M(log(N)-log(2\pi)) \approx -2 log (p(\boldsymbol{t}|\boldsymbol{w}_{Bayes})) + Mlog(N)$  
+\
+Asymptotically, when $N$ large relative to $M$ this is an approxmiation for non-Gaussian models too  
+\
+Penalty increases for large N (more data, penalty is larger)  
+\
+$log(2\pi)$ becomes insignificant for large N  
+\
+Bartlett's paradox: prior parameters have no impact on posterior, but affect model complexity, will always pick simpler model  
+
+#Questions  
+\
+Intuition on K, what do observations tell you?  
+\
+Slide 9) last line: taking average by 1/n, then taking expected value?  
+\
+Slide 10) Why is J negative? Inverse?  
+\
+Slide 15) Last line equation?
+
+#GLM
+Background:  
+\
+3.)  
+\
+Hard to predict $t$ when variance is much larger than $0$, when $p$ approaches $0$ or $1$  
+\
+4.1)  
+\
+Want to minimize $E[L(s,t)]$   
+\
+$L(s,t)$ is loss function (takes wrong prediction, target)   
+\
+$E[L(s,t)] = 0 * p(L(1,1)) + 0 * p(L(0,0)) + c * p(L(1,0)) + c * p(L(0,1))$  
+\
+$p(L(1,0)) = p(pred=1) * p(truth = 0) = p(t=1)p(t=0) = p(1-p)$  
+\
+Therefore, $E[L(s,t)] = 2c(p(1-p))$  
+\
+minimize expected value, take derivative with respect to $p$  
+\
+$E' = 2c(1-p) = 0$   
+\
+$1-2P = 0$  
+\
+$p = \frac{1}{2}$  
+\
+\
+\
+Slide 5)  
+\
+-Use linear models for the mean of non-real valued outputs  
+\
+-Build predictive models for non-real valued outputs; look deeper into aspects of the distribution of the output other than first two moments  
+\
+-Special case: supervised classification. Categorical output; predict label for given input  
+\
+Setting:  
+\
+-Output $\boldsymbol{t}$; binary/counts  
+\
+-Input $\boldsymbol{x}$  
+\
+Supervised classification: output is category, want to predict category for given new input  
+\
+\
+Whiteboard notes:  
+\
+Model non real output: original scale is different from linear models  
+\
+"Please put everything in markdown" -Felex  
+\
+\
+\
+Slide 6)    
+\
+Recall decompositions of joint distribution in linear regression  
+\
+Broadly, we have two possibilities:  
+\
+1. Generative models (Bayes classifies, discriminant analysis, etc)  
+\
+$p(\boldsymbol{t},\boldsymbol{x}) = p(\boldsymbol{x}|\boldsymbol{t}) p(\boldsymbol{t})$ implies $p(\boldsymbol{t}|\boldsymbol{x}) \propto p(\boldsymbol{x}|\boldsymbol{t}) p(t)$  
+\
+2. GLMs (regression, logistic/probit/Poisson regression, discriminative models)  
+\
+$p(\boldsymbol{t},\boldsymbol{x},\theta) = p(\boldsymbol{t} | \boldsymbol{x},\theta) p(x)$  
+\
+As with linear regression, the key quantity modelled here is $y(\boldsymbol{t}) = E[t|\boldsymbol{x}]$  
+\
+\
+\
+Whiteboard notes:  
+\
+\
+factorization to decompose the joint density $f(x,y) = f(x)f(y)$ iff $(x,y)$ are independent  
+\
+2 ways:  
+\
+1.  
+\
+Bayes classifier: $p(\boldsymbol{t},\boldsymbol{x}) = p(\boldsymbol{x} | \boldsymbol{t}) p(\boldsymbol{t})$  
+\
+Is appropriate if we have clear separation (pay bills or not pay bills)    
+\
+Not appropriate if difficult to classify  
+\
+Why should we model $p(\boldsymbol{x}|\boldsymbol{t})$ when we want $p(\boldsymbol{t}|\boldsymbol{x})$  
+\
+$N >> M$  
+\
+
+2.  
+\
+Named generalized because you can generate whole dataset with this model  
+\
+Appropriate when you have dimensions (dimension of $x$ is big, $t$ is 1-dimension)  $M >>N$ (lots of features, difficult to classify)    
+\
+\
+Slide 7)    
+\
+$NdEF (z,\theta,q) \equiv p(z|\theta,q) = exp{q[z \theta -c(\theta)] + h(z,q)}$  
+\
+$t \sim \mathcal{N}(\mu, q^{-1})$ implies $t \sim NdEF(\theta = \mu,q), t \in R$  
+\
+$t \sim Bern(p)$ implies $t \sim NdEF(\theta = log(\frac{p}{1-p}),1), t \in {0,1}$  
+\
+$t \sim Bin(n,p)$ implies $z = \frac{t}{n} \sim NdEF(\theta = log(\frac{p}{1-p}),q=n), t \in {0,1,...,n}$  
+\
+$t \sim Pois(\lambda)$ implies $t \sim NdEF(\theta = log(\lambda),1), t = 0,1,2...$  
+\
+Many (most!) are not: e.g. Student; but most of those taught in basic stats courses are!  
+\
+Whiteboard Notes:  
+\
+$NdEF =$ natural distribution of exponential family  
+\
+z is standardized categories (standardized $\boldsymbol{t}'s$) want to transform $t$ from {0,1} domain to $R^n$  
+\
+Want to model the mean of the model $E[\boldsymbol{t}|\boldsymbol{x}]$ if it's not Gaussian  
+\
+$\theta$ is natural (mean of z or $\phi w$), gives location, $q$ is still precision     
+\
+$p(z|\theta,q)$ is density  
+\
+$c(\theta)$ is generalized. $\theta_{1}+\theta_{2}+...$ can be polynomial, etc  
+\
+$h(z,q)$ models relationship between z and $q$, integrates to 1 (normalizing constant)  
+\
+$\theta$ acts linearly with z, nonlinear with $h$, don't know how z interacts with $q$   
+\
+$\frac{t}{n}$ is fraction of successes  
+\
+$Gaussian \in NdEF \theta = \mu$, q is precision  
+\
+Gaussian density = $\frac{\sqrt{q}}{\sqrt{n}} exp{\frac{-q}{2}[t-\mu]^2}$  
+\
+$=\frac{\sqrt{q}}{\sqrt{n}}exp{\frac{-q}{2}[t^{2}-2\mu t+\mu^{2}]}$ 
+\
+$=exp{\frac{-q}{2}[t^{2}-z \theta +c(\theta)]}$  
+\
+\
+Slide 8)  
+\
+$K(s) = log(E[e^{sz}]) = q(c(\theta + \frac{s}{q}) - c(\theta))$  
+\
+
+\
+\
+\
+Whiteboard notes:  
+\
+$c(\theta)$ encodes information about distribution  
+\
+$c(\theta)$ at steep points: curvature is high, variance is high  
+\
+$c(\theta)$ at flat points: curvature is small, small variance  
+\
+if second derivative is positive: convex, can shift function up without changing  
+\
+Within the exponential family: can obtain moments from taking derivatives  
+\
+Variance function tells you how to find variance from the mean  
+\
+Slide 9)  
+\
+Whiteboard notes:  
+\
+Want to learn $\theta$ from the data  
+\
+$\gamma_{i}$ is the weight of the precision, to make sure outliers do not matter  
+\
+s is weighted sum of data (sufficient statistics, (mean of data and sum of weights)    
+\
+Want to maximize log likelihood $-2[\gamma_{n} q [z_{n}\theta - c(\theta)]] = q \gamma_{n} z_{n} \theta - q \gamma_{n} c(\theta)$   
+\
+$=q \theta \sum_{i} \gamma_{i} z_{i} - q c(\theta) \sum_{i} \gamma_{i}$  
+\
+$= q \theta s_{2} (z) - q c(\theta) s_{1}(z)$  
+\
+Derivative of above with respect to $\theta$ equals $\theta_{MLE}$  
+\
+Slide 10)  
+\
+Whiteboard notes:  
+\
+Variance not i.i.d, we allow $\theta$ to depend on inputs, each different point from $\boldsymbol{x}$ has different variance.    
+\
+g defines right scale of mean to make $y(\boldsymbol{x},\boldsymbol{x})$ linear, takes mean as input, transforms mean in a way that scales it, models output as linear (remaps, so we can have nonlinearity in each observation)    
+\
+$f(x)$ takes in $\phi w$ as input, output is $\theta$  
+\
+$\theta(\phi w) = F(\phi w)$ and $F = c'^{-1}(g^{-1}(x))$  
+\
+When you have c function, you can choose g (have two degrees of freedom, c and g)  
+\
+
+\
+\
+Slide 12)  
+\
+Canonical link: there is a g such that $\theta$ is exactly the linear predictor (f is identity function)  
+\
+Slide 18)  
+\
+Deviance measures lack of fit, small deviance means good fit, likelihood measures fit  
+\
+Log likelihood ratio is positive, distance between deviance  
+\
+Deviance can be compared to distribution, $R^{2}$ can be comparted to distribution, deviance is log likelihood evaluated at MLE  
+\
+We we calculate the deviance increment, we compare that number to the chi squared statistics with degrees of freedom equal to the difference of the number of parameters between the two models. If it is statistically significant, we say that they are the same distribution. "This is wrong"-Thomas  
+\
+Deviance of m2 has better fit,because it has more features. $2(D_{m_{1}}-D_{m_{2}}) \geq 0$. $D_{m_{1}}$ is how much m1 deviates from true distribution
+\
+Slide 19)  
+\
+In GLM variance, residuals depend on mean, linear regression, mean and variance are constant.  
+\
+Deviance residuals: large $D_{M}$ means bad fit
+\
+$\Gamma_{nn}$ is deviance for each observation (diagonal matrix)  
+\
+Slide 23)  
+\
+Classification: Choose label based on probability of loss  
+\
+Learning binary GLM: estimating probability that $t=1$  
+\
+Slide 24)  
+\
+Linear separation between zero and one that's why we transform our $\phi w$ in order to get this linear separation, using g function  
+\
+$|\phi w - t| min$ implies $p^{*} = \theta = c'^{-1}( \phi w^{*})$  
+
+\
+Slide 25)  
+\
+You have to compare the error of your model to the model with just the intercept. Type 1 and type 2 errors are weighted differently  
+\
+$\pi(t)$ is only small subset that you are interested in  
+\
+$p(t)$ is the whole dataset  
+\
+Want subsample that inherits characteristics of population.  
+\
+Have sample with low number of people with disease, put these people in sample, but you are no longer sampling random, in order to correct, multiply by $\frac{p(t)}{\pi(t)}$  
+
+#Questions  
+\
+$M>>N$ do we prefer glm or generative models  
+\
+$c'^{-1}$ interpretation? (slide 10)  
+\
+
+
